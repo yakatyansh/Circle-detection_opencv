@@ -14,15 +14,9 @@ def find_circle_center(img):
     # Apply Gaussian Blur to reduce noise
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
 
-    # Use a mask to detect circles only in the center region
-    height, width = blurred.shape
-    mask = np.zeros_like(blurred)
-    cv2.circle(mask, (width//2, height//2), min(width, height)//3, 255, -1)
-    blurred = cv2.bitwise_and(blurred, blurred, mask=mask)
-
-    # Detect circles with strict parameters
+    # Detect circles with slightly relaxed parameters for faster detection
     circles = cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, dp=1.2, minDist=50,
-                               param1=100, param2=70, minRadius=30, maxRadius=100)
+                               param1=150, param2=60, minRadius=30, maxRadius=100)
 
     if circles is not None:
         circles = np.round(circles[0, :]).astype("int")
@@ -39,17 +33,10 @@ def main():
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
     
-    frame_skip = 2  # Process every 2nd frame
-    frame_count = 0
-
     while True:
         ret, frame = cap.read()
         if not ret:
             break
-
-        frame_count += 1
-        if frame_count % frame_skip != 0:
-            continue  # Skip processing some frames
 
         height, width, _ = frame.shape
         camera_center = (width // 2, height // 2)

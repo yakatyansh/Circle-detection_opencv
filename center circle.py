@@ -15,8 +15,8 @@ def find_circle_center(img):
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
 
     # Detect circles with slightly relaxed parameters for faster detection
-    circles = cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, dp=1.2, minDist=50,
-                               param1=150, param2=60, minRadius=30, maxRadius=100)
+    circles = cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, dp=1.2, minDist=30,
+                               param1=150, param2=60, minRadius=20, maxRadius=60)
 
     if circles is not None:
         circles = np.round(circles[0, :]).astype("int")

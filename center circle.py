@@ -29,16 +29,16 @@ def find_circle_center(img):
         center = (int(x), int(y))
         radius = int(radius)
 
-        # Approximate contour to check circularity
+        
         perimeter = cv2.arcLength(cnt, True)
         approx_area = cv2.contourArea(cnt)
         circularity = (4 * np.pi * approx_area) / (perimeter ** 2 + 1e-5)
 
-        # Filter based on circularity and size
+      
         if 0.75 < circularity < 1.2 and 25 < radius < 70:
             valid_circles.append((center[0], center[1], radius))
 
-    # Run HoughCircles with stricter parameters
+   
     circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp=1.2, minDist=30,
                                param1=100, param2=50, minRadius=20, maxRadius=70)
 
@@ -46,7 +46,7 @@ def find_circle_center(img):
         circles = np.round(circles[0, :]).astype("int")
         valid_circles.extend(circles)
 
-    # Return the largest detected circle (or None)
+   
     return max(valid_circles, key=lambda c: c[2]) if valid_circles else None
 
 def calculate_distance(center1, center2):
@@ -55,7 +55,7 @@ def calculate_distance(center1, center2):
 def main():
     cap = cv2.VideoCapture(0)
 
-    # Set lower resolution for better performance
+   
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
